@@ -29,7 +29,7 @@ def fetch_json(url: str) -> dict:
 
 
 def fetch_history(symbol: str) -> dict:
-    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?range=1y&interval=1d"
+    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?range=5y&interval=1d"
     data = fetch_json(url)
     result = data["chart"]["result"][0]
     timestamps = result["timestamp"]
@@ -64,7 +64,7 @@ def merge_series(wti: dict, brent: dict) -> list:
             last_b = brent[d]
         if last_w is not None and last_b is not None:
             merged.append([d, last_w, last_b])
-    return merged[-365:]
+    return merged
 
 
 def build_note(as_of_date: str, chart_end_date: str, wti_delta: float, brent_delta: float) -> str:
