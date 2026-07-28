@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>国际油价一年走势</title>
+<title>国际油价五年走势</title>
 <style>
   :root {
     color-scheme: light;
@@ -167,7 +167,7 @@
 </head>
 <body>
 <div class="viz-root">
-  <h1>国际原油价格走势(近一年)</h1>
+  <h1>国际原油价格走势(近五年)</h1>
   <p class="subtitle">WTI 与布伦特原油每日收盘价 · __DATE_RANGE__</p>
 
   <div class="stat-row">
@@ -249,25 +249,19 @@ for (let i = 0; i <= ySteps; i++) {
   svg.appendChild(label);
 }
 
-const monthTicks = [];
-let lastMonth = null;
+let lastYear = null;
 data.forEach((d, i) => {
-  const month = d[0].slice(0, 7);
-  if (month !== lastMonth) {
-    monthTicks.push(i);
-    lastMonth = month;
+  const year = d[0].slice(0, 4);
+  if (year !== lastYear) {
+    const gx = x(i);
+    const label = ns('text');
+    label.setAttribute('x', gx); label.setAttribute('y', H - M.bottom + 18);
+    label.setAttribute('text-anchor', 'start');
+    label.setAttribute('class', 'axis-label');
+    label.textContent = year;
+    svg.appendChild(label);
+    lastYear = year;
   }
-});
-const shownTicks = monthTicks.filter((_, idx) => idx % 2 === 0);
-shownTicks.forEach(i => {
-  const gx = x(i);
-  const label = ns('text');
-  label.setAttribute('x', gx); label.setAttribute('y', H - M.bottom + 18);
-  label.setAttribute('text-anchor', 'middle');
-  label.setAttribute('class', 'axis-label');
-  const d = new Date(data[i][0]);
-  label.textContent = (d.getMonth() + 1) + '月';
-  svg.appendChild(label);
 });
 
 const axisLine = ns('line');
